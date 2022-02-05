@@ -27,6 +27,7 @@ import android.os.IBinder;
 import android.util.Log;
 import androidx.preference.PreferenceManager;
 
+import org.lineageos.settings.display.DisplayNodes;
 import org.lineageos.settings.utils.FileUtils;
 
 import org.lineageos.settings.sensors.PickupSensor;
@@ -35,6 +36,7 @@ import org.lineageos.settings.sensors.ProximitySensor;
 public class DozeService extends Service {
     private static final String TAG = "DozeService";
     private static final boolean DEBUG = false;
+
 
     private ProximitySensor mProximitySensor;
     private PickupSensor mPickupSensor;
@@ -48,11 +50,12 @@ public class DozeService extends Service {
             }
         }
     };
+    
+    private String DC_DIMMING_NODE;
+    private String DC_DIMMING_ENABLE_KEY;
+    private String HBM_NODE;
+    private String HBM_ENABLE_KEY;
 
-    private static final String DC_DIMMING_NODE = "/sys/devices/platform/soc/soc:qcom,dsi-display/msm_fb_ea_enable";
-    private static final String DC_DIMMING_ENABLE_KEY = "dc_dimming_enable";
-    private static final String HBM_NODE = "/sys/devices/platform/soc/soc:qcom,dsi-display/hbm";
-    private static final String HBM_ENABLE_KEY = "hbm_mode";
     private boolean enableDc;
     private boolean enableHbm;
 
@@ -69,6 +72,11 @@ public class DozeService extends Service {
         screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
         screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(mScreenStateReceiver, screenStateFilter);
+
+        DC_DIMMING_ENABLE_KEY = DisplayNodes.getDcDimmingEnableKey();
+        DC_DIMMING_NODE = DisplayNodes.getDcDimmingNode();
+        HBM_ENABLE_KEY = DisplayNodes.getHbmEnableKey();
+        HBM_NODE = DisplayNodes.getHbmNode();
     }
 
     @Override
