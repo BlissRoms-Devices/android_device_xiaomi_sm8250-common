@@ -251,6 +251,9 @@ on post-fs-data
     chown system system /sys/devices/platform/soc/soc:qcom,dsi-display-primary/dimlayer_bl
     chmod 0660 /sys/devices/platform/soc/soc:qcom,dsi-display-primary/dimlayer_bl
     
+    chown system system /sys/devices/platform/soc/soc:qcom,dsi-display/hbm
+    chmod 0660 /sys/devices/platform/soc/soc:qcom,dsi-display/hbm
+
     # Create directory used by display clients
     mkdir /data/vendor/display 0770 system graphics
 
