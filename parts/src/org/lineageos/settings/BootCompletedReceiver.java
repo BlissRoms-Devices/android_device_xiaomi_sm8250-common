@@ -28,6 +28,7 @@ import org.lineageos.settings.touchsampling.TouchSamplingUtils;
 import org.lineageos.settings.thermal.ThermalUtils;
 import org.lineageos.settings.refreshrate.RefreshUtils;
 import org.lineageos.settings.utils.FileUtils;
+import org.lineageos.settings.display.DisplayNodes;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 
@@ -35,10 +36,10 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
     private static final boolean DEBUG = false;
     private static final String TAG = "XiaomiParts";
-    private static final String DC_DIMMING_ENABLE_KEY = "dc_dimming_enable";
-    private static final String DC_DIMMING_NODE = "/sys/devices/platform/soc/soc:qcom,dsi-display/msm_fb_ea_enable";
-    private static final String HBM_ENABLE_KEY = "hbm_mode";
-    private static final String HBM_NODE = "/sys/devices/platform/soc/soc:qcom,dsi-display/hbm";
+    private String DC_DIMMING_ENABLE_KEY;
+    private String DC_DIMMING_NODE;
+    private String HBM_ENABLE_KEY;
+    private String HBM_NODE;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -47,8 +48,12 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         PopupCameraUtils.startService(context);
         TouchSamplingUtils.restoreSamplingValue(context);
         ThermalUtils.startService(context);
-        RefreshUtils.startService(context);        
-
+        RefreshUtils.startService(context);    
+        
+        DC_DIMMING_ENABLE_KEY = DisplayNodes.getDcDimmingEnableKey();
+        DC_DIMMING_NODE = DisplayNodes.getDcDimmingNode();
+        HBM_ENABLE_KEY = DisplayNodes.getHbmEnableKey();
+        HBM_NODE = DisplayNodes.getHbmNode();  
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         boolean dcDimmingEnabled = sharedPrefs.getBoolean(DC_DIMMING_ENABLE_KEY, false);
